@@ -12,7 +12,7 @@ jobs:
 
       - name: Generate Page with Secret
         env:
-          SECRET_CONTENT: ${{ secrets.SECRET_MESSAGE }}  # Your hidden content
+          SECRET_CONTENT: ${{ vars.SECRET_MESSAGE }}  # Your hidden content
         run: |
           # Create index.html with secret or placeholder
           if [ -n "$SECRET_CONTENT" ]; then
