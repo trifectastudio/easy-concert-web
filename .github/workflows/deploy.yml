@@ -1,33 +1,36 @@
-name: Deploy Secret Page
+name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
 
+# Grant permissions for the Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    # Associate this job with the "github-pages" environment
-    environment: github-pages  # 🎯 Key addition
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Generate Page with Secret
         env:
-          # Pull secret from the environment (not repository secrets)
           SECRET_CONTENT: ${{ secrets.SECRET_MESSAGE }}
         run: |
           echo "::add-mask::$SECRET_CONTENT"
           mkdir -p public
           echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          force_orphan: true
+        id: deployment
+        uses: actions/deploy-pages@v3
