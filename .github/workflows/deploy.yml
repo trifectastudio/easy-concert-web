@@ -12,13 +12,16 @@ jobs:
 
       - name: Generate Page with Secret
         env:
-          SECRET_CONTENT: ${{ vars.SECRET_MESSAGE }}  # Your hidden content
+          SECRET_CONTENT: ${{ secrets.SECRET_MESSAGE }}  # Secret value
         run: |
-          # Create index.html with secret or placeholder
+          # Create public folder first
+          mkdir -p public
+
+          # Generate index.html
           if [ -n "$SECRET_CONTENT" ]; then
-            echo "<h1>Hello, $SECRET_CONTENT!</h1>" > public/index.html
+            echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
           else
-            echo "<h1>Hello, Public!</h1>" > public/index.html
+            echo "<h1>No secret found</h1>" > public/index.html
           fi
 
       - name: Deploy
