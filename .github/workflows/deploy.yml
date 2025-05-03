@@ -19,11 +19,7 @@ jobs:
           SECRET_CONTENT: ${{ vars.SECRET_MESSAGE }}
         run: |
           mkdir -p public
-          if [ -n "$SECRET_CONTENT" ]; then
-            echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
-          else
-            echo "<h1>Public Content</h1>" > public/index.html
-          fi
+          echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
