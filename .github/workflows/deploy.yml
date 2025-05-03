@@ -1,0 +1,28 @@
+name: Deploy Secret Page
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate Page with Secret
+        env:
+          SECRET_CONTENT: ${{ secrets.SECRET_MESSAGE }}  # Your hidden content
+        run: |
+          # Create index.html with secret or placeholder
+          if [ -n "$SECRET_CONTENT" ]; then
+            echo "<h1>Hello, $SECRET_CONTENT!</h1>" > public/index.html
+          else
+            echo "<h1>Hello, Public!</h1>" > public/index.html
+          fi
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
