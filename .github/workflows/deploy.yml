@@ -16,7 +16,7 @@ jobs:
 
       - name: Generate Page with Secret
         env:
-          SECRET_CONTENT: ${{ vars.SECRET_MESSAGE }}
+          SECRET_CONTENT: ${{ env.SECRET_MESSAGE }}
         run: |
           mkdir -p public
           echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
