@@ -3,7 +3,6 @@ on:
   push:
     branches: [main]
 
-# Grant permissions for the Pages deployment
 permissions:
   contents: read
   pages: write
@@ -23,6 +22,12 @@ jobs:
           echo "::add-mask::$SECRET_CONTENT"
           mkdir -p public
           echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
+
+      # 🔥 Critical: Upload the artifact for the deploy job
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./public
 
   deploy:
     runs-on: ubuntu-latest
