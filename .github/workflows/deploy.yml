@@ -23,9 +23,8 @@ jobs:
           mkdir -p public
           echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
 
-      # 🔥 Critical: Upload the artifact for the deploy job
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v2  # ✅ Correct action
         with:
           path: ./public
 
