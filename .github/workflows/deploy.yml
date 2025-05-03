@@ -6,26 +6,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Critical for pushing to gh-pages
+      pages: write     # Required for GitHub Pages
+      id-token: write  # Needed for OIDC auth (optional but recommended)
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Generate Page with Secret
         env:
-          SECRET_CONTENT: ${{ secrets.SECRET_MESSAGE }}  # Secret value
+          SECRET_CONTENT: ${{ vars.SECRET_MESSAGE }}
         run: |
-          # Create public folder first
           mkdir -p public
-
-          # Generate index.html
           if [ -n "$SECRET_CONTENT" ]; then
             echo "<h1>Secret: $SECRET_CONTENT</h1>" > public/index.html
           else
-            echo "<h1>No secret found</h1>" > public/index.html
+            echo "<h1>Public Content</h1>" > public/index.html
           fi
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          force_orphan: true  # Force overwrite gh-pages branch
