@@ -34,7 +34,7 @@ jobs:
         run: |
           cp -r easy-concert-src/public/* .
           # Optionally, delete the cloned repo to clean up
-          rm -rf easy-concert-src
+          # rm -rf easy-concert-src
       # 🔥 Add your content updates here!
       # - name: Modify content mid-job
       #   run: |
@@ -47,7 +47,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './public'  # Upload the modified directory
+          path: './easy-concert-src/public'  # Upload the modified directory
 
       - name: Deploy to GitHub Pages
         id: deployment
