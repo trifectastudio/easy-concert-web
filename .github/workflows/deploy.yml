@@ -24,11 +24,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 🔥 Add your content updates here!
-      - name: Modify content mid-job
+      # Clone the private repo using the PAT
+      - name: Clone private repo
         run: |
-          # Example 1: Create a new file with dynamic content
-          echo "<h1>Updated at $(date)</h1>" > public/index.html
+          git clone https://${{ secrets.PRIVATE_REPO_TOKEN }}@github.com/trifectastudio/easy-concert-src.git
+        env:
+          PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+      - name: Copy files
+        run: |
+          cp -r easy-concert-src/public/* .
+          # Optionally, delete the cloned repo to clean up
+          rm -rf easy-concert-src
+      # 🔥 Add your content updates here!
+      # - name: Modify content mid-job
+      #   run: |
+      #     # Example 1: Create a new file with dynamic content
+      #     echo "<h1>Updated at $(date)</h1>" > public/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
