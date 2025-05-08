@@ -34,7 +34,11 @@ jobs:
       - name: Copy files
         run: |
           cp -r easy-concert-src/public/* .
-
+      - name: Verify copied files (DEBUG)
+        run: |
+          echo "Current directory structure:"
+          pwd
+          ls -al
       # Add Node.js setup if not already present in your environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -44,7 +48,11 @@ jobs:
       # Run gen.js after copying files
       - name: Generate dynamic content
         run: node find-events.js # Ensure gen.js is in the current directory after copying
-
+      - name: Verify copied files (DEBUG)
+        run: |
+          echo "Current directory structure:"
+          pwd
+          ls -al
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
