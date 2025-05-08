@@ -30,16 +30,20 @@ jobs:
           git clone https://${{ secrets.PRIVATE_REPO_TOKEN }}@github.com/trifectastudio/easy-concert-src.git
         env:
           PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+
       - name: Copy files
         run: |
           cp -r easy-concert-src/public/* .
-          # Optionally, delete the cloned repo to clean up
-          # rm -rf easy-concert-src
-      # 🔥 Add your content updates here!
-      # - name: Modify content mid-job
-      #   run: |
-      #     # Example 1: Create a new file with dynamic content
-      #     echo "<h1>Updated at $(date)</h1>" > public/index.html
+
+      # Add Node.js setup if not already present in your environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Specify your Node.js version
+
+      # Run gen.js after copying files
+      - name: Generate dynamic content
+        run: node find-events.js # Ensure gen.js is in the current directory after copying
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -47,7 +51,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './easy-concert-src/public'  # Upload the modified directory
+          path: '.'  # Corrected path to upload from the current directory
 
       - name: Deploy to GitHub Pages
         id: deployment
