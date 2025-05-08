@@ -4,7 +4,8 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
-
+  schedule:
+    - cron: '0 */12 * * *'  # 12:00 AM and 12:00 PM HKT
 permissions:
   contents: read
   pages: write
