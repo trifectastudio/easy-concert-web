@@ -35,6 +35,11 @@ jobs:
       - name: Copy files
         run: |
           cp -r easy-concert-src/public/* .
+      # Add this new step here
+      - name: Update sitemap lastmod date
+        run: |
+          sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$(date +%F)<\/lastmod>/" public/sitemap.xml
+          
       - name: Verify copied files (DEBUG)
         run: |
           echo "Current directory structure:"
