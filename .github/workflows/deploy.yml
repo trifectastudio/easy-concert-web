@@ -1,4 +1,4 @@
-name: Deploy Static Content with Dynamic Updates
+name: Deploy Static Content with Dynamic Updates - ${{ github.event_name == 'schedule' && format('YYYY-MM-DD HH:mm:ss', github.event.schedule) || format('YYYY-MM-DD HH:mm:ss', github.event.created_at) }}
 
 on:
   push:
