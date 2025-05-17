@@ -5,7 +5,15 @@ on:
     branches: ["main"]
   workflow_dispatch:
   schedule:
-    - cron: '0 */12 * * *'  # 12:00 AM and 12:00 PM HKT
+    - cron: '59 16 * * *'  # 00:59 HKT
+    - cron: '59 23 * * *'  # 06:59 HKT
+    - cron: '59 1 * * *'   # 09:59 HKT
+    - cron: '59 2 * * *'   # 10:59 HKT
+    - cron: '59 3 * * *'   # 11:59 HKT
+    - cron: '59 4 * * *'   # 12:59 HKT
+    - cron: '59 5 * * *'   # 13:59 HKT
+    - cron: '59 6 * * *'   # 14:59 HKT
+    - cron: '59 7 * * *'   # 15:59 HKT
 permissions:
   contents: read
   pages: write
