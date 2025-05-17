@@ -1,4 +1,4 @@
-name: Deploy Static Content with Dynamic Updates - ${{ github.event_name == 'schedule' && format('YYYY-MM-DD HH:mm:ss', github.event.schedule) || format('YYYY-MM-DD HH:mm:ss', github.event.created_at) }}
+name: Deploy Static Content with Dynamic Updates
 
 on:
   push:
@@ -30,6 +30,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Show Job started
+        run: echo "Job started at $(date +'%Y-%m-%d %H:%M:%S %Z')"
       - name: Checkout code
         uses: actions/checkout@v4
 
