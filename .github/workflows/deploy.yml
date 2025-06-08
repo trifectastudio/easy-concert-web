@@ -32,8 +32,15 @@ jobs:
     steps:
       - name: Show Job started
         run: echo "Job started at $(date +'%Y-%m-%d %H:%M:%S %Z')"
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install html-minifier-terser uglify-js
       - name: Checkout code
         uses: actions/checkout@v4
+      
 
       # Clone the private repo using the PAT
       - name: Clone private repo
@@ -42,9 +49,22 @@ jobs:
         env:
           PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
 
-      - name: Copy files
+      - name: Run minification script
+        run: node minify-all.js
+
+      - name: Copy files from minified dist directory
         run: |
-          cp -r easy-concert-src/public/* .
+          # Copy all files except .html and .js from public/
+          shopt -s globstar nullglob
+          for file in easy-concert-src/public/**/*; do
+            if [[ -f "$file" && ! "$file" =~ \.html$ && ! "$file" =~ \.js$ ]]; then
+              dest="./${file#easy-concert-src/public/}"
+              mkdir -p "$(dirname "$dest")"
+              cp "$file" "$dest"
+            fi
+          done
+          # Copy all files from dist/
+          cp -r easy-concert-src/dist/* .
       # Add this new step here
       - name: Update sitemap lastmod date
         run: |
