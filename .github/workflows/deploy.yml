@@ -32,15 +32,8 @@ jobs:
     steps:
       - name: Show Job started
         run: echo "Job started at $(date +'%Y-%m-%d %H:%M:%S %Z')"
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Install dependencies
-        run: npm install html-minifier-terser uglify-js
       - name: Checkout code
         uses: actions/checkout@v4
-      
 
       # Clone the private repo using the PAT
       - name: Clone private repo
@@ -49,22 +42,12 @@ jobs:
         env:
           PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
 
-      - name: Run minification script
-        run: node minify-all.js
+      - name: Create dummy folder
+        run: mkdir -p public
 
-      - name: Copy files from minified dist directory
+      - name: Copy files
         run: |
-          # Copy all files except .html and .js from public/
-          shopt -s globstar nullglob
-          for file in easy-concert-src/public/**/*; do
-            if [[ -f "$file" && ! "$file" =~ \.html$ && ! "$file" =~ \.js$ ]]; then
-              dest="./${file#easy-concert-src/public/}"
-              mkdir -p "$(dirname "$dest")"
-              cp "$file" "$dest"
-            fi
-          done
-          # Copy all files from dist/
-          cp -r easy-concert-src/dist/* .
+          cp -r easy-concert-src/public/* public/
       # Add this new step here
       - name: Update sitemap lastmod date
         run: |
@@ -80,15 +63,31 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'  # Specify your Node.js version
-
+      - name: Install dependencies
+        run: npm install html-minifier-terser uglify-js
       # Run gen.js after copying files
       - name: Generate dynamic content
-        run: node find-events.js # Ensure gen.js is in the current directory after copying
+        run: node /public/find-events.js # Ensure gen.js is in the current directory after copying
+      - name: Run minification script
+        run: node minify-all.js
       - name: Verify copied files (DEBUG)
         run: |
           echo "Current directory structure:"
           pwd
           ls -al
+      - name: Copy non-HTML and non-JS files to dist
+        run: |
+          mkdir -p dist
+          find public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} dist/ \;
+      - name: Verify copied files (DEBUG)
+        run: |
+          echo "Current directory structure:"
+          pwd
+          ls -al
+
+      - name: Change working directory to dist
+        run: echo "Moving to dist directory for GitHub Pages deployment"
+        working-directory: ./dist
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
