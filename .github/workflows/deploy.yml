@@ -96,7 +96,7 @@ jobs:
       #     find public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} dist/ \;
       - name: Copy non-JS and non-HTML files from public to dist
         run: |
-          find easy-concert-src/public -type f -not -name "*.js" -not -name "*.html" -exec cp {} easy-concert-src/dist/ \;
+          find public -type f -not -name "*.js" -not -name "*.html" -exec cp {} dist/ \;
         working-directory: easy-concert-src
       - name: Verify copied files (DEBUG)
         working-directory: easy-concert-src/dist
