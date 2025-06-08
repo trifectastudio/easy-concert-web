@@ -75,7 +75,7 @@ jobs:
         with:
           node-version: '20'  # Specify your Node.js version
       - name: Install dependencies
-        run: npm install html-minifier-terser uglify-js
+        run: npm install html-minifier-terser uglify-js terser
       # Run gen.js after copying files
       - name: Generate dynamic content
         working-directory: easy-concert-src/public
