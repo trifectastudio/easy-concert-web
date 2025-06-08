@@ -45,9 +45,9 @@ jobs:
       - name: Create dummy folder
         run: mkdir -p public
 
-      - name: Copy files
-        run: |
-          cp -r easy-concert-src/public/* public/
+      # - name: Copy files
+      #   run: |
+      #     cp -r easy-concert-src/public/* public/
       - name: Verify copied files (DEBUG)
         run: |
           echo "Current directory structure:"
@@ -56,7 +56,7 @@ jobs:
       # Add this new step here
       - name: Update sitemap lastmod date
         run: |
-          sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$(date +%F)<\/lastmod>/" public/sitemap.xml
+          sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$(date +%F)<\/lastmod>/" easy-concert-src/public/sitemap.xml
 
       - name: Verify copied files (DEBUG)
         run: |
@@ -72,9 +72,9 @@ jobs:
         run: npm install html-minifier-terser uglify-js
       # Run gen.js after copying files
       - name: Generate dynamic content
-        run: node public/find-events.js # Ensure gen.js is in the current directory after copying
+        run: node easy-concert-src/public/find-events.js # Ensure gen.js is in the current directory after copying
       - name: Run minification script
-        run: node minify-all.js
+        run: node easy-concert-src/minify-all.js
       - name: Verify copied files (DEBUG)
         run: |
           echo "Current directory structure:"
@@ -83,7 +83,7 @@ jobs:
       - name: Copy non-HTML and non-JS files to dist
         run: |
           mkdir -p dist
-          find public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} dist/ \;
+          find easy-concert-src/public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} easy-concert-src/dist/ \;
       - name: Verify copied files (DEBUG)
         run: |
           echo "Current directory structure:"
@@ -92,7 +92,7 @@ jobs:
 
       - name: Change working directory to dist
         run: echo "Moving to dist directory for GitHub Pages deployment"
-        working-directory: ./dist
+        working-directory: ./easy-concert-src/dist
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
