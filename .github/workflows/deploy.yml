@@ -78,8 +78,8 @@ jobs:
         run: npm install html-minifier-terser uglify-js
       # Run gen.js after copying files
       - name: Generate dynamic content
-        working-directory: easy-concert-src
-        run: node public/find-events.js # Ensure gen.js is in the current directory after copying
+        working-directory: easy-concert-src/public
+        run: node find-events.js # Ensure gen.js is in the current directory after copying
       - name: Run minification script
         working-directory: easy-concert-src
         run: node minify-all.js
