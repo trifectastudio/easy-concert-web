@@ -84,18 +84,22 @@ jobs:
         working-directory: easy-concert-src
         run: node minify-all.js
       - name: Verify copied files (DEBUG)
-        working-directory: easy-concert-src
+        working-directory: easy-concert-src/public
         run: |
           echo "Current directory structure:"
           pwd
           ls -al
-      - name: Copy non-HTML and non-JS files to dist
-        working-directory: easy-concert-src
+      # - name: Copy non-HTML and non-JS files to dist
+      #   working-directory: easy-concert-src
+      #   run: |
+      #     mkdir -p dist
+      #     find public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} dist/ \;
+      - name: Copy non-JS and non-HTML files from public to dist
         run: |
-          mkdir -p dist
-          find public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} dist/ \;
-      - name: Verify copied files (DEBUG)
+          find easy-concert-src/public -type f -not -name "*.js" -not -name "*.html" -exec cp {} easy-concert-src/dist/ \;
         working-directory: easy-concert-src
+      - name: Verify copied files (DEBUG)
+        working-directory: easy-concert-src/dist
         run: |
           echo "Current directory structure:"
           pwd
