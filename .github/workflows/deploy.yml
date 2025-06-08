@@ -49,9 +49,9 @@ jobs:
       #   run: |
       #     cp -r easy-concert-src/public/* public/
 
-      - name: change directory to easy-concert-src
-        run: |
-          cd easy-concert-src
+      # - name: change directory to easy-concert-src
+      #   run: |
+      #     cd easy-concert-src
       - name: Verify copied files (DEBUG)
         run: |
           echo "Current directory structure:"
@@ -59,10 +59,12 @@ jobs:
           ls -al
       # Add this new step here
       - name: Update sitemap lastmod date
+        working-directory: easy-concert-src
         run: |
           sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$(date +%F)<\/lastmod>/" public/sitemap.xml
 
       - name: Verify copied files (DEBUG)
+        working-directory: easy-concert-src
         run: |
           echo "Current directory structure:"
           pwd
@@ -76,27 +78,32 @@ jobs:
         run: npm install html-minifier-terser uglify-js
       # Run gen.js after copying files
       - name: Generate dynamic content
+        working-directory: easy-concert-src
         run: node public/find-events.js # Ensure gen.js is in the current directory after copying
       - name: Run minification script
+        working-directory: easy-concert-src
         run: node minify-all.js
       - name: Verify copied files (DEBUG)
+        working-directory: easy-concert-src
         run: |
           echo "Current directory structure:"
           pwd
           ls -al
       - name: Copy non-HTML and non-JS files to dist
+        working-directory: easy-concert-src
         run: |
           mkdir -p dist
           find public -type f ! -name "*.html" ! -name "*.js" -exec cp --parents {} dist/ \;
       - name: Verify copied files (DEBUG)
+        working-directory: easy-concert-src
         run: |
           echo "Current directory structure:"
           pwd
           ls -al
 
-      - name: change directory to root
-        run: |
-          cd ..
+      # - name: change directory to root
+      #   run: |
+      #     cd ..
       - name: Copy everything from easy-concert-src/dist to root
         run: |
           cp -r easy-concert-src/dist/* .
