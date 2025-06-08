@@ -48,10 +48,15 @@ jobs:
       - name: Copy files
         run: |
           cp -r easy-concert-src/public/* public/
+      - name: Verify copied files (DEBUG)
+        run: |
+          echo "Current directory structure:"
+          pwd
+          ls -al
       # Add this new step here
       - name: Update sitemap lastmod date
         run: |
-          sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$(date +%F)<\/lastmod>/" /public/sitemap.xml
+          sed -i "s/<lastmod>.*<\/lastmod>/<lastmod>$(date +%F)<\/lastmod>/" public/sitemap.xml
 
       - name: Verify copied files (DEBUG)
         run: |
@@ -67,7 +72,7 @@ jobs:
         run: npm install html-minifier-terser uglify-js
       # Run gen.js after copying files
       - name: Generate dynamic content
-        run: node /public/find-events.js # Ensure gen.js is in the current directory after copying
+        run: node public/find-events.js # Ensure gen.js is in the current directory after copying
       - name: Run minification script
         run: node minify-all.js
       - name: Verify copied files (DEBUG)
